@@ -45,6 +45,37 @@ class TournamentCultivator:
     return np.random.choice([True, False], p=[self.p_cross, 1 - self.p_cross])
 
 
+class SmartWieghtCultivator(TournamentCultivator):
+
+  def __init__(self, N_t, p_mutate, p_cross, operator, evaluator, selection_pressure):
+    self.selection_pressure = selection_pressure
+
+    TournamentCultivator.__init__(
+        self, N_t, p_mutate, p_cross, operator, evaluator)
+
+  def cultivateFrom(self, population: list):
+    N = len(population)
+    
+    assert self.selection_pressure <= 2/(N*(N - 1)), 'Selection pressure is very high'
+    
+    scores = [self.evaluator.evaluate(x) for x in population]
+    self.ranking_list = np.argsort(scores)
+    
+    ranking = np.arange(N)
+    q = self.selection_pressure*(N-1)/2 + 1/N
+
+    self.probs = q - ranking * self.selection_pressure
+    
+    return TournamentCultivator.cultivateFrom(self, population)
+
+  def roundOfTournament(self, population: list):
+    participants_indexes = np.random.choice(self.ranking_list, size=self.N_t, p=self.probs)
+    participants = [population[i] for i in participants_indexes]
+
+    winner, _ = self.evaluator.bestOfPopulationt(participants)
+
+    return winner
+
 class EliteCultivator:
   
   def __init__(self, cultivator, p_elite):
@@ -64,12 +95,12 @@ class EliteCultivator:
     
     return new_population
     
-  def separateElite(self, population, n):
+  def separateElite(self, population, size):
     scores = [self.evaluator.evaluate(x) for x in population]
 
     ranking = np.argsort(scores)
 
-    elite_indexes = ranking[:n]
-    others_indexes = ranking[n:]
+    elite_indexes = ranking[:size]
+    others_indexes = ranking[size:]
 
     return [population[i] for i in elite_indexes], [population[i] for i in others_indexes]
