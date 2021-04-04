@@ -1,4 +1,4 @@
-from bitarray import bitarray
+from bitarray.util import urandom
 
 class BinaryFabric:
   
@@ -6,4 +6,4 @@ class BinaryFabric:
     self.n = n
   
   def generatePopulation(self, N):
-    return [bitarray(self.n) for _ in range(N)]
+    return [urandom(self.n) for _ in range(N)]
