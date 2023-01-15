@@ -197,7 +197,14 @@ class ExpulsionCultivator:
 
     new_population.extend(population)
 
-    return sorted(new_population, key = lambda x: self.evaluator.evaluate(x))[:N]
+    sorted_p = sorted(new_population, key = lambda x: self.evaluator.evaluate(x))
+    distinct_p = sorted_p[:1]
+
+    for ind in sorted_p:
+      if ind != distinct_p[-1]:
+        distinct_p.append(ind)
+      
+    return distinct_p[:N]
 
 
   def shouldMutate(self):
