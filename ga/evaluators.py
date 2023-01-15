@@ -22,3 +22,21 @@ class MinimumEvaluator(SimpleEvaluator):
 
   def evaluate(self, x):
     return self.f(self.transformer.transform(x))
+  
+class AverageEvaluator(SimpleEvaluator):
+  def __init__(self, f, transformer):
+    self.f = f
+    self.transformer = transformer
+
+  def evaluate(self, x):
+    return self.f(self.transformer.transform(x))
+
+
+  def bestOfPopulationt(self, population):
+    scores = [self.evaluate(x) for x in population]
+
+    best_index = np.argmin(scores)
+
+    avg_score = np.sum(scores) / len(scores)
+
+    return population[best_index], avg_score
