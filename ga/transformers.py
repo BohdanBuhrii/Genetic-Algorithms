@@ -9,16 +9,6 @@ class BinaryTransformer:
     return (x_int[1] - x_int[0]) / (2 ** n - 1) * d + x_int[0]
 
 
-class SingleDimentionTransformer(BinaryTransformer):
-
-  def __init__(self, n, x_int):
-    self.n = n
-    self.x_int = x_int
-
-  def transform(self, x):
-    return BinaryTransformer.transform(self, x, self.x_int, self.n)
-
-
 class MultiDimentionTransformer(BinaryTransformer):
 
   def __init__(self, n_xs: list, x_ints: list):

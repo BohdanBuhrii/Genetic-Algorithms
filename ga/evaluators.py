@@ -15,14 +15,7 @@ class SimpleEvaluator(ABC):
     return population[best_index], scores[best_index]
 
 
-class MinimumEvaluator(SimpleEvaluator):
-  def __init__(self, f, transformer):
-    self.f = f
-    self.transformer = transformer
 
-  def evaluate(self, x):
-    return self.f(self.transformer.transform(x))
-  
 class AverageEvaluator(SimpleEvaluator):
   def __init__(self, f, transformer):
     self.f = f

@@ -11,7 +11,6 @@ class InbreedingSelector:
 
     return mom, dad
 
-
 class OutbreedingSelector:
   def __init__(self, distance_metric):
     self.distance = distance_metric
